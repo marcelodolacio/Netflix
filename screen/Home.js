@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar, Dimensions } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { ProfileContext } from '../context/ProfileContext';
 import styled from 'styled-components/native';
 import { GetLocation, GetCountry } from '../utils/Location';
 //import GetCountry from '../utils/Location';
@@ -77,36 +77,48 @@ const Home = (props) => {
     setMovies(moviesJson);
   }, []);
 
-  // console.log("position");
-  // console.log(position);
 
   return (
-    <>
-      <StatusBar
-        translucent
-        backgroundColor="transparent"
-        barStyle="light-content"
-      />
-      <Container>
-        <Poster source={require('../assets/poster.jpg')}>
-          <Gradient
-            locations={[0, 0.2, 0.6, 0.93]}
-            colors={[
-              'rgba(0,0,0,0.5)',
-              'rgba(0,0,0,0.0)',
-              'rgba(0,0,0,0.0)',
-              'rgba(0,0,0,1)',
-            ]}>
-            <Header />
-            <Hero />
-          </Gradient>
-        </Poster>
-        <Movies label={`Continuar Assistindo comoaa `} item={nationalMovies} />
-        <Movies label={`Nacionais`} item={nationalMovies} />
-        <Movies label="Recomendados" item={movies} />
-        <Movies label="Top 10" item={movies} />
-      </Container>
-    </>
+    <ProfileContext.Consumer>
+      {({ user, setUser }) => {
+        let moviesR = [];
+        if (user) {
+          console.log("usuario home: ", user)
+          const data = require('../assets/moviesToResume.json');
+          console.log("usuario home: ", user)
+          moviesR = data[user];
+        }
+
+        return (
+          <>
+            <StatusBar
+              translucent
+              backgroundColor="transparent"
+              barStyle="light-content"
+            />
+            <Container>
+              <Poster source={require('../assets/poster.jpg')}>
+                <Gradient
+                  locations={[0, 0.2, 0.6, 0.93]}
+                  colors={[
+                    'rgba(0,0,0,0.5)',
+                    'rgba(0,0,0,0.0)',
+                    'rgba(0,0,0,0.0)',
+                    'rgba(0,0,0,1)',
+                  ]}>
+                  <Header />
+                  <Hero />
+                </Gradient>
+              </Poster>
+              <Movies label={`Continuar Assistindo como ${user}`} item={moviesR} />
+              <Movies label={`Nacionais`} item={nationalMovies} />
+              <Movies label="Recomendados" item={movies} />
+              <Movies label="Top 10" item={movies} />
+            </Container>
+          </>)
+      }}
+
+    </ProfileContext.Consumer>
   );
 };
 
