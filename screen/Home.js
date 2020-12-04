@@ -48,22 +48,28 @@ const Home = (props) => {
     })
       .catch((error) => {
         console.log('erro ao obter localizacao: ' + error)
+        console.log(error)
         setPosition(null);
       });
   }, []);
 
   useEffect(() => {
-    if (position) {
+    const getNationalMovies = async () => {
 
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      const country = GetCountry({ lat, lng });
-      console.log("ciybtry: " + country)
-      const nMovies = movies.filter((item, index) => {
-        return true;
-      })
-      setNationalMovies[nMovies];
+      if (position) {
+
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const country = await GetCountry({ lat, lng });
+        console.log("ciybtry: ", country)
+        const nMovies = movies.filter((item, index) => {
+          return item.Country.indexOf(country) !== -1;
+        });
+        setNationalMovies(nMovies);
+      }
     }
+
+    getNationalMovies();
   }, [position]);
 
   useEffect(() => {
@@ -71,8 +77,8 @@ const Home = (props) => {
     setMovies(moviesJson);
   }, []);
 
-  console.log("position");
-  console.log(position);
+  // console.log("position");
+  // console.log(position);
 
   return (
     <>
@@ -95,7 +101,8 @@ const Home = (props) => {
             <Hero />
           </Gradient>
         </Poster>
-        <Movies label={`Continuar Assistindo como `} item={nationalMovies} />
+        <Movies label={`Continuar Assistindo comoaa `} item={nationalMovies} />
+        <Movies label={`Nacionais`} item={nationalMovies} />
         <Movies label="Recomendados" item={movies} />
         <Movies label="Top 10" item={movies} />
       </Container>
