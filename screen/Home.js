@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { StatusBar, Dimensions } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 
 import styled from 'styled-components/native';
-import Geolocation from '@react-native-community/geolocation';
+import { GetLocation, GetCountry } from '../utils/Location';
+//import GetCountry from '../utils/Location';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
 import Movies from '../components/Movies';
@@ -16,6 +17,7 @@ const api = [
   require('../assets/movies/movie3.jpg'),
   require('../assets/movies/movie4.jpg'),
 ];
+
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -31,8 +33,46 @@ const Gradient = styled(LinearGradient)`
   height: 100%;
 `;
 
-console.log(Geolocation.getCurrentPosition(info => console.log(info)));
-const Home = () => {
+const Home = (props) => {
+
+  const [movies, setMovies] = useState([])
+  const [position, setPosition] = useState(null)
+  const [nationalMovies, setNationalMovies] = useState([])
+
+  useEffect(() => {
+
+    GetLocation().then((info) => {
+
+      setPosition(info);
+      console.log('Sucesso localizacao: ' + info)
+    })
+      .catch((error) => {
+        console.log('erro ao obter localizacao: ' + error)
+        setPosition(null);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (position) {
+
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const country = GetCountry({ lat, lng });
+      console.log("ciybtry: " + country)
+      const nMovies = movies.filter((item, index) => {
+        return true;
+      })
+      setNationalMovies[nMovies];
+    }
+  }, [position]);
+
+  useEffect(() => {
+    const moviesJson = require('../assets/Movies.json');
+    setMovies(moviesJson);
+  }, []);
+
+  console.log("position");
+  console.log(position);
 
   return (
     <>
@@ -55,8 +95,9 @@ const Home = () => {
             <Hero />
           </Gradient>
         </Poster>
-        <Movies label="Recomendados" item={api} />
-        <Movies label="Top 10" item={api} />
+        <Movies label={`Continuar Assistindo como `} item={nationalMovies} />
+        <Movies label="Recomendados" item={movies} />
+        <Movies label="Top 10" item={movies} />
       </Container>
     </>
   );
