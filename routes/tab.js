@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import Home from './../screen/Home';
 import More from './../screen/More';
+import { trans } from '../languages/util';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -21,31 +23,31 @@ export default class Tabs extends React.Component {
                     },
                 }}>
                 <Tab.Screen name="Home" component={Home} options={{
-                    tabBarLabel: 'Home',
+                    tabBarLabel: trans("Home"),
                     tabBarIcon: ({ focused, color, size }) => {
                         return <Entypo name="home" size={size} color={color} />
                     }
                 }} />
                 <Tab.Screen name="Search" component={More} options={{
-                    tabBarLabel: 'Search',
+                    tabBarLabel: trans("Search"),
                     tabBarIcon: ({ focused, color, size }) => {
                         return <AntDesign name="search1" size={size} color={color} />
                     }
                 }} />
                 <Tab.Screen name="Comming" component={More} options={{
-                    tabBarLabel: 'Comming',
+                    tabBarLabel: trans("Comming"),
                     tabBarIcon: ({ focused, color, size }) => {
                         return <Entypo name="new" size={size} color={color} />
                     }
                 }} />
                 <Tab.Screen name="Download" component={More} options={{
-                    tabBarLabel: 'Download',
+                    tabBarLabel: trans("Download"),
                     tabBarIcon: ({ focused, color, size }) => {
                         return <AntDesign name="download" size={size} color={color} />
                     }
                 }} />
                 <Tab.Screen name="More" component={More} options={{
-                    tabBarLabel: 'More',
+                    tabBarLabel: trans("More"),
                     tabBarIcon: ({ focused, color, size }) => {
                         return <AntDesign name="pluscircle" size={size} color={color} />
                     }
